@@ -1,1 +1,1267 @@
+<!DOCTYPE html>
 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Victoria Music School - Payment System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bunny-pink: #FFB7D5;
+            --bunny-pink-light: #FFC9E0;
+            --bunny-pink-dark: #FF94C7;
+            --bunny-blue: #A8D8FF;
+            --bunny-purple: #D4A5FF;
+            --bunny-yellow: #FFE5A0;
+            --bunny-peach: #FFCBA4;
+            --success-green: #A8E6A3;
+            --warning-orange: #FFD4A3;
+            --bg-cream: #FFF9F0;
+            --bg-white: #FFFFFF;
+            --text-dark: #5A4A42;
+            --text-light: #9B8B83;
+            --shadow: rgba(255, 183, 213, 0.3);
+            --shadow-lg: rgba(255, 183, 213, 0.5);
+        }
+
+```
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Quicksand', sans-serif;
+        background: linear-gradient(135deg, #FFF9F0 0%, #FFE8F5 50%, #E8F4FF 100%);
+        min-height: 100vh;
+        padding: 20px;
+        color: var(--text-dark);
+        position: relative;
+        overflow-x: hidden;
+    }
+
+    body::before,
+    body::after {
+        content: '🐰';
+        position: fixed;
+        font-size: 3rem;
+        opacity: 0.1;
+        animation: float 20s infinite ease-in-out;
+        z-index: 0;
+    }
+
+    body::before {
+        top: 10%;
+        left: 5%;
+        animation-delay: 0s;
+    }
+
+    body::after {
+        bottom: 15%;
+        right: 8%;
+        animation-delay: 10s;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-30px) rotate(10deg); }
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+        animation: slideInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .header {
+        text-align: center;
+        margin-bottom: 40px;
+        animation: fadeIn 0.8s ease-out;
+    }
+
+    .bunny-logo {
+        font-size: 5rem;
+        margin-bottom: 10px;
+        display: inline-block;
+        animation: bounce 2s infinite;
+        filter: drop-shadow(0 4px 8px rgba(255, 183, 213, 0.4));
+    }
+
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-15px); }
+    }
+
+    .header h1 {
+        font-family: 'Fredoka', sans-serif;
+        font-size: clamp(2rem, 5vw, 3.2rem);
+        font-weight: 700;
+        background: linear-gradient(135deg, #FFB7D5 0%, #D4A5FF 50%, #A8D8FF 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 8px;
+        letter-spacing: 1px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .header .subtitle {
+        font-size: clamp(1rem, 3vw, 1.3rem);
+        color: var(--text-light);
+        font-weight: 500;
+    }
+
+    .card {
+        background: var(--bg-white);
+        border-radius: 30px;
+        padding: clamp(25px, 5vw, 45px);
+        box-shadow: 0 8px 32px var(--shadow), 0 0 0 3px var(--bunny-pink-light);
+        margin-bottom: 24px;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .card::before {
+        content: '🎵';
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        font-size: 6rem;
+        opacity: 0.05;
+        transform: rotate(25deg);
+    }
+
+    .card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 48px var(--shadow-lg), 0 0 0 3px var(--bunny-pink);
+    }
+
+    .input-group {
+        margin-bottom: 28px;
+        position: relative;
+    }
+
+    .input-group label {
+        display: block;
+        margin-bottom: 12px;
+        font-weight: 600;
+        color: var(--text-dark);
+        font-size: 1.1rem;
+        font-family: 'Fredoka', sans-serif;
+    }
+
+    .input-group label::before {
+        content: '🐰 ';
+        font-size: 1.2rem;
+    }
+
+    input[type="tel"] {
+        width: 100%;
+        padding: 18px 24px;
+        font-size: 1.15rem;
+        border: 3px solid var(--bunny-pink-light);
+        border-radius: 20px;
+        transition: all 0.3s ease;
+        font-family: 'Quicksand', sans-serif;
+        background: var(--bg-cream);
+        font-weight: 500;
+    }
+
+    input[type="tel"]:focus {
+        outline: none;
+        border-color: var(--bunny-pink);
+        background: white;
+        box-shadow: 0 0 0 6px rgba(255, 183, 213, 0.15);
+        transform: scale(1.02);
+    }
+
+    .btn {
+        width: 100%;
+        padding: 20px 32px;
+        font-size: 1.2rem;
+        font-weight: 700;
+        font-family: 'Fredoka', sans-serif;
+        background: linear-gradient(135deg, var(--bunny-pink) 0%, var(--bunny-purple) 100%);
+        color: white;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 6px 24px var(--shadow);
+        position: relative;
+        overflow: hidden;
+        letter-spacing: 0.5px;
+    }
+
+    .btn::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+
+    .btn:hover::before {
+        width: 300px;
+        height: 300px;
+    }
+
+    .btn:hover {
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 0 12px 32px var(--shadow-lg);
+    }
+
+    .btn:active {
+        transform: translateY(-1px) scale(0.98);
+    }
+
+    .btn:disabled {
+        background: linear-gradient(135deg, #D0D0D0, #B0B0B0);
+        cursor: not-allowed;
+        box-shadow: none;
+        transform: none;
+    }
+
+    .btn-secondary {
+        background: linear-gradient(135deg, var(--bunny-blue) 0%, var(--bunny-purple) 100%);
+    }
+
+    .loading {
+        display: none;
+        text-align: center;
+        padding: 30px 20px;
+    }
+
+    .loading.active {
+        display: block;
+        animation: fadeIn 0.3s ease-out;
+    }
+
+    .loading-bunny {
+        font-size: 4rem;
+        display: inline-block;
+        animation: spin-hop 1.5s infinite ease-in-out;
+    }
+
+    @keyframes spin-hop {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        25% { transform: translateY(-20px) rotate(10deg); }
+        50% { transform: translateY(0) rotate(0deg); }
+        75% { transform: translateY(-15px) rotate(-10deg); }
+    }
+
+    .loading-text {
+        margin-top: 16px;
+        color: var(--text-light);
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    .results {
+        display: none;
+    }
+
+    .results.active {
+        display: block;
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .student-card {
+        background: linear-gradient(135deg, #FFF9F0 0%, #FFE8F5 100%);
+        border-radius: 25px;
+        padding: 28px;
+        margin-bottom: 24px;
+        border: 3px solid var(--bunny-pink-light);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .student-card::before {
+        content: '🎶';
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 4rem;
+        opacity: 0.08;
+        transform: rotate(-15deg);
+    }
+
+    .student-card:hover {
+        transform: translateX(8px) scale(1.01);
+        box-shadow: 0 8px 24px var(--shadow);
+        border-color: var(--bunny-pink);
+    }
+
+    .student-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .student-name {
+        font-family: 'Fredoka', sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        letter-spacing: 0.5px;
+    }
+
+    .student-name::before {
+        content: '🐰 ';
+        font-size: 1.8rem;
+    }
+
+    .class-time-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        background: white;
+        border-radius: 25px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--bunny-purple);
+        box-shadow: 0 4px 12px var(--shadow);
+        border: 2px solid var(--bunny-pink-light);
+        font-family: 'Quicksand', sans-serif;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 16px;
+        margin-bottom: 20px;
+    }
+
+    .info-item {
+        background: white;
+        padding: 16px;
+        border-radius: 18px;
+        box-shadow: 0 4px 12px rgba(255, 183, 213, 0.2);
+        border: 2px solid var(--bunny-pink-light);
+        transition: all 0.3s ease;
+    }
+
+    .info-item:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px var(--shadow);
+    }
+
+    .info-label {
+        font-size: 0.9rem;
+        color: var(--text-light);
+        margin-bottom: 6px;
+        font-weight: 600;
+    }
+
+    .info-value {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        font-family: 'Fredoka', sans-serif;
+    }
+
+    .fee-section {
+        background: white;
+        padding: 28px;
+        border-radius: 20px;
+        margin-top: 20px;
+        box-shadow: 0 4px 16px var(--shadow);
+        border: 3px solid var(--bunny-yellow);
+        position: relative;
+    }
+
+    .fee-section::before {
+        content: '💰';
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        font-size: 3rem;
+        opacity: 0.2;
+    }
+
+    .fee-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .fee-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        font-family: 'Fredoka', sans-serif;
+    }
+
+    .fee-amount {
+        font-family: 'Fredoka', sans-serif;
+        font-size: 3rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #FFB7D5 0%, #FF94C7 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin: 12px 0;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .fee-detail {
+        font-size: 1rem;
+        color: var(--text-light);
+        margin-top: 8px;
+        font-weight: 500;
+    }
+
+    .fee-breakdown {
+        background: var(--bg-cream);
+        padding: 16px;
+        border-radius: 12px;
+        margin-top: 12px;
+        border-left: 4px solid var(--bunny-pink);
+    }
+
+    .fee-breakdown-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        font-size: 0.95rem;
+    }
+
+    .fee-breakdown-label {
+        color: var(--text-light);
+        font-weight: 500;
+    }
+
+    .fee-breakdown-value {
+        color: var(--text-dark);
+        font-weight: 700;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 24px;
+        border-radius: 25px;
+        font-weight: 700;
+        font-size: 1rem;
+        letter-spacing: 0.5px;
+        font-family: 'Fredoka', sans-serif;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        border: 2px solid;
+    }
+
+    .status-paid {
+        background: linear-gradient(135deg, var(--success-green), #8FD98F);
+        color: #2D5F2B;
+        border-color: #A8E6A3;
+    }
+
+    .status-unpaid {
+        background: linear-gradient(135deg, var(--warning-orange), #FFBE7A);
+        color: #8B5A00;
+        border-color: #FFD4A3;
+    }
+
+    .status-pending {
+        background: linear-gradient(135deg, var(--bunny-blue), #8FC8FF);
+        color: #1A5A8F;
+        border-color: #A8D8FF;
+    }
+
+    .upload-section {
+        background: linear-gradient(135deg, #FFF9F0 0%, #FFE8F5 100%);
+        padding: 32px;
+        border-radius: 20px;
+        margin-top: 20px;
+        border: 3px dashed var(--bunny-pink-light);
+    }
+
+    .upload-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 20px;
+        text-align: center;
+        font-family: 'Fredoka', sans-serif;
+    }
+
+    .upload-title::before {
+        content: '🐰📸 ';
+    }
+
+    .upload-area {
+        border: 4px dashed var(--bunny-pink-light);
+        border-radius: 20px;
+        padding: 48px 24px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: white;
+    }
+
+    .upload-area:hover {
+        border-color: var(--bunny-pink);
+        background: rgba(255, 183, 213, 0.05);
+        transform: scale(1.02);
+        border-style: solid;
+    }
+
+    .upload-area.dragover {
+        border-color: var(--bunny-pink-dark);
+        background: rgba(255, 183, 213, 0.1);
+        border-style: solid;
+        transform: scale(1.05);
+    }
+
+    .upload-icon {
+        font-size: 5rem;
+        margin-bottom: 16px;
+        display: inline-block;
+        animation: wiggle 2s infinite ease-in-out;
+    }
+
+    @keyframes wiggle {
+        0%, 100% { transform: rotate(0deg); }
+        25% { transform: rotate(-10deg); }
+        75% { transform: rotate(10deg); }
+    }
+
+    .upload-text {
+        font-size: 1.15rem;
+        color: var(--text-dark);
+        margin-bottom: 8px;
+        font-weight: 600;
+    }
+
+    .upload-hint {
+        font-size: 0.95rem;
+        color: var(--text-light);
+    }
+
+    input[type="file"] {
+        display: none;
+    }
+
+    .preview-container {
+        margin-top: 24px;
+        text-align: center;
+    }
+
+    .preview-image {
+        max-width: 100%;
+        max-height: 400px;
+        border-radius: 20px;
+        box-shadow: 0 8px 24px var(--shadow);
+        border: 3px solid var(--bunny-pink-light);
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    .message {
+        padding: 20px 28px;
+        border-radius: 20px;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        animation: slideInDown 0.4s ease-out;
+        font-weight: 600;
+        border: 3px solid;
+    }
+
+    @keyframes slideInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .message-icon {
+        font-size: 2rem;
+    }
+
+    .message-error {
+        background: linear-gradient(135deg, #FFE5E5, #FFD0D0);
+        color: #8B0000;
+        border-color: #FFB0B0;
+    }
+
+    .message-success {
+        background: linear-gradient(135deg, var(--success-green), #D4F5D2);
+        color: #2D5F2B;
+        border-color: #A8E6A3;
+    }
+
+    .message-info {
+        background: linear-gradient(135deg, var(--bunny-blue), #D0EBFF);
+        color: #1A5A8F;
+        border-color: #A8D8FF;
+    }
+
+    @media (max-width: 768px) {
+        body {
+            padding: 12px;
+        }
+
+        .card {
+            border-radius: 20px;
+        }
+
+        .student-card {
+            padding: 20px;
+        }
+
+        .fee-amount {
+            font-size: 2.2rem;
+        }
+
+        .student-name {
+            font-size: 1.6rem;
+        }
+
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .bunny-logo {
+            font-size: 4rem;
+        }
+    }
+
+    .hidden {
+        display: none !important;
+    }
+
+    .mt-2 {
+        margin-top: 16px;
+    }
+
+    .footer-bunnies {
+        text-align: center;
+        margin-top: 30px;
+        font-size: 2rem;
+        opacity: 0.6;
+    }
+
+    .footer-bunnies span {
+        display: inline-block;
+        animation: hop 1.5s infinite ease-in-out;
+    }
+
+    .footer-bunnies span:nth-child(2) {
+        animation-delay: 0.3s;
+    }
+
+    .footer-bunnies span:nth-child(3) {
+        animation-delay: 0.6s;
+    }
+
+    @keyframes hop {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+</style>
+```
+
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="bunny-logo">🐰</div>
+            <h1>Victoria Music School</h1>
+            <p class="subtitle">Payment System</p>
+        </div>
+
+```
+    <div class="card" id="searchCard">
+        <div class="input-group">
+            <label for="phoneInput">Phone Number</label>
+            <input 
+                type="tel" 
+                id="phoneInput" 
+                placeholder="e.g., 0912345678" 
+                maxlength="15"
+                autocomplete="tel"
+            >
+        </div>
+        <button class="btn" id="searchBtn">
+            <span>🔍 Check Payment Status</span>
+        </button>
+        
+        <div class="loading" id="loading">
+            <div class="loading-bunny">🐰</div>
+            <p class="loading-text">Loading your information...</p>
+        </div>
+    </div>
+
+    <div class="results" id="results">
+        <div id="messageContainer"></div>
+        <div id="studentContainer"></div>
+        <button class="btn btn-secondary mt-2" id="backBtn">
+            🐰 Back to Search
+        </button>
+    </div>
+
+    <div class="footer-bunnies">
+        <span>🐰</span>
+        <span>🎵</span>
+        <span>🐰</span>
+    </div>
+</div>
+
+<script>
+    // ==================== CONFIGURATION ====================
+    
+    // Google Sheets CSV URL
+    // Replace with your Google Sheets published CSV URL
+    const SHEET_URL = 'YOUR_GOOGLE_SHEET_CSV_URL';
+    
+    // Optional: GitHub Settings (for storing payment proofs)
+    const GITHUB_CONFIG = {
+        enabled: false,
+        owner: 'YOUR_GITHUB_USERNAME',
+        repo: 'YOUR_REPO_NAME',
+        token: 'YOUR_GITHUB_TOKEN'
+    };
+
+    // ==================== MAIN PROGRAM ====================
+
+    class PaymentSystem {
+        constructor() {
+            this.studentsData = [];
+            this.init();
+        }
+
+        init() {
+            this.cacheElements();
+            this.attachEventListeners();
+            this.showWelcomeMessage();
+        }
+
+        cacheElements() {
+            this.phoneInput = document.getElementById('phoneInput');
+            this.searchBtn = document.getElementById('searchBtn');
+            this.loading = document.getElementById('loading');
+            this.searchCard = document.getElementById('searchCard');
+            this.results = document.getElementById('results');
+            this.backBtn = document.getElementById('backBtn');
+            this.studentContainer = document.getElementById('studentContainer');
+            this.messageContainer = document.getElementById('messageContainer');
+        }
+
+        attachEventListeners() {
+            this.searchBtn.addEventListener('click', () => this.handleSearch());
+            this.phoneInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') this.handleSearch();
+            });
+            this.backBtn.addEventListener('click', () => this.handleBack());
+        }
+
+        showWelcomeMessage() {
+            if (SHEET_URL === 'YOUR_GOOGLE_SHEET_CSV_URL') {
+                this.showMessage(
+                    'info',
+                    '⚙️ System not configured yet. Please set SHEET_URL in the code.'
+                );
+            }
+        }
+
+        async handleSearch() {
+            const phone = this.phoneInput.value.trim();
+            
+            if (!phone) {
+                this.showMessage('error', '🐰 Please enter your phone number!');
+                return;
+            }
+
+            if (phone.length < 8) {
+                this.showMessage('error', '🐰 Please enter a complete phone number!');
+                return;
+            }
+
+            await this.searchStudent(phone);
+        }
+
+        async searchStudent(phone) {
+            this.showLoading(true);
+            this.clearMessages();
+
+            try {
+                await this.loadSheetData();
+
+                // Clean phone number - extract only digits
+                const cleanPhone = phone.replace(/\D/g, '');
+
+                // Search for matching students
+                const matchedStudents = this.studentsData.filter(student => {
+                    const studentPhone = this.extractDigits(student.contact);
+                    return studentPhone && (studentPhone.includes(cleanPhone) || cleanPhone.includes(studentPhone));
+                });
+
+                this.showLoading(false);
+
+                if (matchedStudents.length === 0) {
+                    this.showMessage(
+                        'error',
+                        '🐰 No student found with this phone number. Please check and try again!'
+                    );
+                    return;
+                }
+
+                this.displayStudents(matchedStudents);
+
+            } catch (error) {
+                console.error('Search error:', error);
+                this.showLoading(false);
+                this.showMessage(
+                    'error',
+                    '🐰 Oops! Failed to load data. Please check your connection and try again.'
+                );
+            }
+        }
+
+        async loadSheetData() {
+            if (SHEET_URL === 'YOUR_GOOGLE_SHEET_CSV_URL') {
+                throw new Error('Please configure SHEET_URL first');
+            }
+
+            const url = `${SHEET_URL}&t=${Date.now()}`;
+            const response = await fetch(url);
+            
+            if (!response.ok) {
+                throw new Error('Failed to load data');
+            }
+
+            const csvText = await response.text();
+            this.studentsData = this.parseCSV(csvText);
+            
+            console.log('Loaded', this.studentsData.length, 'student records');
+        }
+
+        parseCSV(csv) {
+            const lines = csv.trim().split('\n');
+            if (lines.length < 2) return [];
+
+            const data = [];
+
+            // Skip header, start from line 1
+            for (let i = 1; i < lines.length; i++) {
+                if (!lines[i].trim()) continue;
+                
+                const values = this.parseCSVLine(lines[i]);
+                
+                // Map CSV columns to our data structure
+                // Column B (index 1) = Student ID
+                // Column C (index 2) = Contact
+                // Column D (index 3) = Class Time
+                // Column E (index 4) = Student Name
+                // Column K (index 10) = Fees
+                
+                const studentId = values[1] || '';
+                const contact = values[2] || '';
+                const classTime = values[3] || '';
+                const studentName = values[4] || '';
+                const feesRaw = values[10] || '';
+                
+                // Only add if we have essential data
+                if (studentId && contact && studentName) {
+                    data.push({
+                        studentId: studentId,
+                        contact: contact,
+                        classTime: classTime,
+                        studentName: studentName,
+                        feesRaw: feesRaw
+                    });
+                }
+            }
+
+            return data;
+        }
+
+        parseCSVLine(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    result.push(current.trim());
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            
+            result.push(current.trim());
+            return result;
+        }
+
+        // Extract only digits from contact field
+        extractDigits(contact) {
+            if (!contact) return '';
+            return contact.replace(/\D/g, '');
+        }
+
+        // Parse fee format: 'V$150, 'V4$150, or '$150
+        parseFees(feesRaw) {
+            if (!feesRaw) {
+                return {
+                    monthlyAmount: 0,
+                    totalMonths: 1,
+                    totalAmount: 0,
+                    display: '$0'
+                };
+            }
+
+            // Remove quotes and spaces
+            const cleanFees = feesRaw.replace(/['"]/g, '').trim();
+            
+            // Check for V pattern (prepaid)
+            const vMatch = cleanFees.match(/V(\d+)?/i);
+            const amountMatch = cleanFees.match(/\$(\d+)/);
+            
+            let months = 1;
+            let monthlyAmount = 0;
+            
+            if (amountMatch) {
+                monthlyAmount = parseInt(amountMatch[1]);
+            }
+            
+            if (vMatch) {
+                // V means 3 months, V4 means 4 months, etc.
+                if (vMatch[1]) {
+                    months = parseInt(vMatch[1]);
+                } else {
+                    months = 3; // Default V means 3 months
+                }
+            }
+            
+            const totalAmount = monthlyAmount * months;
+            
+            return {
+                monthlyAmount: monthlyAmount,
+                totalMonths: months,
+                totalAmount: totalAmount,
+                display: cleanFees,
+                isPrepaid: months > 1
+            };
+        }
+
+        displayStudents(students) {
+            this.clearMessages();
+            
+            let html = students.map((student, index) => 
+                this.createStudentCard(student, index)
+            ).join('');
+
+            this.studentContainer.innerHTML = html;
+            this.searchCard.style.display = 'none';
+            this.results.classList.add('active');
+
+            students.forEach((student, index) => {
+                this.setupUpload(index, student);
+            });
+        }
+
+        createStudentCard(student, index) {
+            const { studentId, studentName, classTime, feesRaw } = student;
+            const fees = this.parseFees(feesRaw);
+            
+            // For now, assume unpaid. You can add a column for payment status later
+            const isPaid = false;
+            const statusClass = isPaid ? 'status-paid' : 'status-unpaid';
+            const statusIcon = isPaid ? '✓' : '⚠';
+            const statusText = isPaid ? 'Paid' : 'Unpaid';
+
+            return `
+                <div class="student-card">
+                    <div class="student-header">
+                        <div class="student-name">${studentName}</div>
+                        ${classTime ? `
+                        <div class="class-time-badge">
+                            🕐 ${classTime}
+                        </div>
+                        ` : ''}
+                    </div>
+
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Student ID</div>
+                            <div class="info-value">${studentId}</div>
+                        </div>
+                    </div>
+
+                    <div class="fee-section">
+                        <div class="fee-header">
+                            <div class="fee-title">Payment Details</div>
+                            <span class="status-badge ${statusClass}">
+                                ${statusIcon} ${statusText}
+                            </span>
+                        </div>
+                        
+                        ${fees.isPrepaid ? `
+                            <div class="fee-breakdown">
+                                <div class="fee-breakdown-item">
+                                    <span class="fee-breakdown-label">💳 Payment Plan:</span>
+                                    <span class="fee-breakdown-value">${fees.totalMonths} Months Prepaid</span>
+                                </div>
+                                <div class="fee-breakdown-item">
+                                    <span class="fee-breakdown-label">📅 Monthly Rate:</span>
+                                    <span class="fee-breakdown-value">$${fees.monthlyAmount}</span>
+                                </div>
+                                <div class="fee-breakdown-item" style="border-top: 2px dashed var(--bunny-pink-light); margin-top: 8px; padding-top: 12px;">
+                                    <span class="fee-breakdown-label">💰 Total Amount:</span>
+                                    <span class="fee-breakdown-value" style="font-size: 1.2rem; color: var(--bunny-pink-dark);">$${fees.totalAmount}</span>
+                                </div>
+                            </div>
+                        ` : `
+                            <div class="fee-amount">$${fees.monthlyAmount}</div>
+                            <div class="fee-detail">Monthly Payment</div>
+                        `}
+                    </div>
+
+                    ${!isPaid ? `
+                    <div class="upload-section">
+                        <div class="upload-title">Upload Payment Proof</div>
+                        <div class="upload-area" id="uploadArea${index}">
+                            <div class="upload-icon">📸</div>
+                            <div class="upload-text">Click or drag image here</div>
+                            <div class="upload-hint">JPG or PNG, max 5MB</div>
+                        </div>
+                        <input type="file" id="fileInput${index}" accept="image/jpeg,image/png,image/jpg">
+                        <div id="preview${index}" class="preview-container"></div>
+                        <button class="btn mt-2 hidden" id="submitBtn${index}">
+                            🐰 Confirm Upload
+                        </button>
+                    </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        setupUpload(index, student) {
+            const uploadArea = document.getElementById(`uploadArea${index}`);
+            const fileInput = document.getElementById(`fileInput${index}`);
+            const preview = document.getElementById(`preview${index}`);
+            const submitBtn = document.getElementById(`submitBtn${index}`);
+
+            if (!uploadArea || !fileInput) return;
+
+            let selectedFile = null;
+
+            uploadArea.addEventListener('click', () => fileInput.click());
+
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('dragover');
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    this.handleFileSelect(files[0], preview, submitBtn, (file) => {
+                        selectedFile = file;
+                    });
+                }
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    this.handleFileSelect(e.target.files[0], preview, submitBtn, (file) => {
+                        selectedFile = file;
+                    });
+                }
+            });
+
+            submitBtn.addEventListener('click', async () => {
+                if (!selectedFile) return;
+                await this.uploadPaymentProof(selectedFile, student, submitBtn);
+            });
+        }
+
+        handleFileSelect(file, previewContainer, submitBtn, callback) {
+            if (!file.type.startsWith('image/')) {
+                alert('🐰 Please upload an image file (JPG or PNG)!');
+                return;
+            }
+
+            if (file.size > 5 * 1024 * 1024) {
+                alert('🐰 File size cannot exceed 5MB!');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewContainer.innerHTML = `
+                    <img src="${e.target.result}" class="preview-image" alt="Payment Proof Preview">
+                `;
+                submitBtn.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+
+            callback(file);
+        }
+
+        async uploadPaymentProof(file, student, submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '🐰 Uploading...';
+
+            try {
+                if (GITHUB_CONFIG.enabled) {
+                    await this.uploadToGitHub(file, student);
+                } else {
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+                }
+
+                submitBtn.innerHTML = '🐰 Success!';
+                submitBtn.style.background = 'linear-gradient(135deg, #A8E6A3, #8FD98F)';
+                
+                const fees = this.parseFees(student.feesRaw);
+                setTimeout(() => {
+                    alert(`🐰 Payment proof uploaded successfully!\n\nStudent: ${student.studentName}\nAmount: $${fees.totalAmount}\n\nWe'll process your payment soon. Thank you!`);
+                }, 500);
+
+            } catch (error) {
+                console.error('Upload failed:', error);
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '🐰 Confirm Upload';
+                alert('🐰 Upload failed. Please try again later!');
+            }
+        }
+
+        async uploadToGitHub(file, student) {
+            const { owner, repo, token } = GITHUB_CONFIG;
+            
+            const base64 = await this.fileToBase64(file);
+            const content = base64.split(',')[1];
+            
+            const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+            const filename = `payment_${student.studentId}_${timestamp}.jpg`;
+            const path = `payments/${filename}`;
+
+            const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: `Payment proof for ${student.studentName}`,
+                    content: content,
+                    branch: 'main'
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('GitHub upload failed');
+            }
+
+            return await response.json();
+        }
+
+        fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        showLoading(show) {
+            if (show) {
+                this.loading.classList.add('active');
+                this.searchBtn.disabled = true;
+            } else {
+                this.loading.classList.remove('active');
+                this.searchBtn.disabled = false;
+            }
+        }
+
+        showMessage(type, text) {
+            const iconMap = {
+                'error': '❌',
+                'success': '✅',
+                'info': 'ℹ️'
+            };
+
+            const html = `
+                <div class="message message-${type}">
+                    <span class="message-icon">${iconMap[type]}</span>
+                    <span>${text}</span>
+                </div>
+            `;
+
+            this.messageContainer.innerHTML = html;
+        }
+
+        clearMessages() {
+            this.messageContainer.innerHTML = '';
+        }
+
+        handleBack() {
+            this.phoneInput.value = '';
+            this.studentContainer.innerHTML = '';
+            this.clearMessages();
+            this.searchCard.style.display = 'block';
+            this.results.classList.remove('active');
+            this.phoneInput.focus();
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        new PaymentSystem();
+    });
+</script>
+```
+
+</body>
+</html>
